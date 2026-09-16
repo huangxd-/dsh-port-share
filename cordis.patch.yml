@@ -1,0 +1,5 @@
+# dsh-port-share bundle patch（dsh.bundle manifest 要求的加载配置）
+# 单包单插件：装上即可用，通过 port_share_* 工具在会话里管理端口共享。
+- insert:
+    - id: dsh-port-share
+      name: dsh-port-share

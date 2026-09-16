@@ -1,0 +1,48 @@
+{
+  "name": "dsh-port-share",
+  "version": "0.1.0",
+  "description": "把本地网络服务分享给局域网和公网：自定义端口、多端口同时共享，手机随时随地测试（TCP 代理 + cloudflared 快速隧道）。",
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": {
+      "default": "./lib/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib",
+    "cordis.patch.yml",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "node --test --test-timeout=60000 \"test/manager.test.js\" \"test/tunnel-unit.test.mjs\" \"test/tools-schema.test.js\"",
+    "test:tunnel-smoke": "node test/smoke-tunnel.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "MIT",
+  "keywords": [
+    "deepseek-harness",
+    "dsh",
+    "dsh-plugin",
+    "port",
+    "share",
+    "tunnel",
+    "cloudflare",
+    "cloudflared",
+    "lan",
+    "proxy",
+    "remote"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": ">=4.0.0"
+  }
+}
