@@ -8,16 +8,18 @@
     ".": {
       "default": "./lib/index.js"
     },
+    "./client": "./client/client.js",
     "./package.json": "./package.json"
   },
   "files": [
     "lib",
+    "client",
     "cordis.patch.yml",
     "README.md",
     "LICENSE"
   ],
   "scripts": {
-    "test": "node --test --test-timeout=60000 \"test/manager.test.js\" \"test/tunnel-unit.test.mjs\" \"test/tools-schema.test.js\"",
+    "test": "node --test --test-timeout=60000 \"test/manager.test.js\" \"test/tunnel-unit.test.mjs\" \"test/tools-schema.test.js\" \"test/web-rpc.test.js\" \"test/client-smoke.test.js\"",
     "test:tunnel-smoke": "node test/smoke-tunnel.mjs"
   },
   "engines": {
@@ -40,6 +42,14 @@
   "dsh": {
     "bundle": {
       "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "inject": [
+        "@deepseek-ai/dsh-client-connection",
+        "@deepseek-ai/dsh-client-ui-slots",
+        "@deepseek-ai/dsh-client-locale"
+      ]
     }
   },
   "peerDependencies": {

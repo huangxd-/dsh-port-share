@@ -38,9 +38,7 @@ New-Item -ItemType Junction `
 
 ## 使用（直接跟 DSH 说人话）
 
-插件注册了 5 个模型工具（`port_share_*`），模型会自动调用。你也可以显式要求：
-
-```text
+插件注册了 5 个模型工具（`port_share_*`），模型会自动调用。你也可以显式要求：```text
 把 3000 端口分享到局域网
 → 端口 3000：✅ 运行中
   局域网: http://192.168.1.5:3000（TCP 代理 0.0.0.0:3000 → 127.0.0.1:3000）
@@ -75,6 +73,17 @@ New-Item -ItemType Junction `
 | `port_share_status` | `port` | 单个共享详情（可达性/URL/运行状态） |
 | `port_share_update` | `port`（必填）、`lan`、`public`、`name`、`publicPort` | 修改共享（只改传入字段） |
 | `port_share_remove` | `port` | 移除共享 |
+
+### 设置页 UI（图形化配置）
+
+除了对话工具，插件还在 DSH **设置**里注册了一个一级入口 **「端口共享」**（与 dsh-pocket 的「手机访问」同级）：
+
+- **新增共享**：输入端口号（必填）、服务地址（默认 `127.0.0.1`）、备注名，点按胶囊开关选择「局域网 / 公网」，一键添加；
+- **共享列表**：每个端口一张卡片，实时显示运行状态（运行中 / 等待服务启动 / 异常）、**局域网地址**、**公网隧道地址**（可直接点开）；
+- **管理**：卡片上可直接开关该端口的局域网 / 公网分享（`port_share_update` 等价操作），或一键移除；
+- **自动刷新**：列表每 5 秒自动刷新一次，也可手动点「刷新」。
+
+> 设置页 UI 与对话工具操作的是同一份配置（`$DSH_HOME/dsh-port-share/shares.json`），两边实时互通。
 
 ## 工作原理
 
@@ -115,9 +124,13 @@ New-Item -ItemType Junction `
 ## 开发
 
 ```bash
-node test/manager.test.js   # 核心逻辑集成测试（不依赖 DSH 宿主）
-node test/smoke-tunnel.mjs  # cloudflared 下载 + 公网隧道端到端冒烟
+node test/manager.test.js        # 核心逻辑集成测试（不依赖 DSH 宿主）
+node test/web-rpc.test.js        # 设置页 RPC 通道单元测试（envelope/分发/桥接）
+node test/client-smoke.test.js   # 客户端 bundle 冒烟测试（槽位注册/接线）
+node test/smoke-tunnel.mjs       # cloudflared 下载 + 公网隧道端到端冒烟
 ```
+
+设置页客户端是**零构建**的：`client/client.js` 即最终产物（手写普通 JS + `window.__ModuleLoader__.load` 包装，同 dsh-pocket 的 client 接入方式），改完无需打包，重启 dsh web / DSH Desktop 生效（junction 软链开发下即时生效）。
 
 ## License
 

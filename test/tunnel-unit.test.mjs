@@ -19,7 +19,7 @@ async function runOrSkip(name, fn) {
     try {
       await fn(t);
     } catch (err) {
-      if (err?.code === 'EPERM' || err?.code === 'EINVAL' || err?.errno === -4048) {
+      if (err?.code === 'EPERM' || err?.code === 'EINVAL' || err?.code === 'EFTYPE' || err?.errno === -4048) {
         t.skip(`环境不允许 spawn（${err.code}），跳过离线隧道验证`);
         return;
       }
@@ -51,7 +51,7 @@ await runOrSkip('startQuickTunnel：二进制不存在/损坏 → 清晰报错',
     await startQuickTunnel({ port: 9999, bin: join(dirname(fakeBin), 'no-such-cloudflared') });
     assert.fail('应抛错');
   } catch (err) {
-    if (err?.code === 'EPERM' || err?.code === 'EINVAL') {
+    if (err?.code === 'EPERM' || err?.code === 'EINVAL' || err?.code === 'EFTYPE') {
       t.skip(`环境不允许 spawn（${err.code}），跳过`);
       return;
     }
